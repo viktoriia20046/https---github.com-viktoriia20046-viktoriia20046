@@ -79,3 +79,43 @@ raw_numbers = [
 
 sanitized_numbers = [normalize_phone(num) for num in raw_numbers]
 print("Нормалізовані номери телефонів для SMS-розсилки:", sanitized_numbers)
+
+#4 завдання 
+from datetime import datetime, timedelta
+
+def get_upcoming_birthdays(users):
+    today = datetime.today().date()
+    upcoming_birthdays = []
+
+    for user in users:
+        birthday = datetime.strptime(user["birthday"], "%Y.%m.%d").date()
+
+        # Визначення дати народження на наступний рік, якщо вона вже минула у поточному році
+        if birthday < today:
+            birthday = birthday.replace(year=today.year + 1)
+
+        # Визначення різниці між днем народження та поточним днем
+        days_until_birthday = (birthday - today).days
+
+        # Перевірка, чи день народження випадає вперед на 7 днів
+        if 0 <= days_until_birthday <= 7:
+            # Перенесення дати привітання на наступний понеділок, якщо день народження припадає на вихідний
+            if birthday.weekday() in [5, 6]:
+                next_monday = birthday + timedelta(days=(7 - birthday.weekday()))
+                congratulation_date = next_monday.strftime("%Y.%m.%d")
+            else:
+                congratulation_date = birthday.strftime("%Y.%m.%d")
+
+            # Додавання інформації до списку привітань
+            upcoming_birthdays.append({"name": user["name"], "congratulation_date": congratulation_date})
+
+    return upcoming_birthdays
+
+# Приклад використання:
+users = [
+    {"name": "John Doe", "birthday": "1985.01.23"},
+    {"name": "Jane Smith", "birthday": "1990.01.27"}
+]
+
+upcoming_birthdays = get_upcoming_birthdays(users)
+print("Список привітань на цьому тижні:", upcoming_birthdays)
