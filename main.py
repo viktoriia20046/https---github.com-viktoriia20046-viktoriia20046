@@ -57,17 +57,21 @@ import re
 
 def normalize_phone(phone_number):
     # Видаляємо всі символи, крім цифр та '+'
-    cleaned_number = re.sub(r'\D', '', phone_number)
+    digits_and_plus = re.sub(r"[^0-9+]", "", phone_number)
 
-    # Додаємо міжнародний код '+38', якщо його немає
-    if not cleaned_number.startswith('+'):
-        cleaned_number = '+38' + cleaned_number
+    # Перевіряємо, чи номер починається з '+', і виправляємо префікс згідно з вказівками
+    if digits_and_plus.startswith("+"):
+        normalized_number = digits_and_plus
+    elif digits_and_plus.startswith("380"):
+        normalized_number = "+" + digits_and_plus
+    elif digits_and_plus.startswith("80"):
+        normalized_number = "+3" + digits_and_plus[1:]
+    elif digits_and_plus.startswith("0"):
+        normalized_number = "+38" + digits_and_plus[1:]
+    else:
+        normalized_number = "+" + digits_and_plus
 
-    # Видаляємо префікс '8', якщо він є
-    cleaned_number = re.sub(r'^8', '', cleaned_number)
-
-    # Повертаємо нормалізований номер
-    return cleaned_number
+    return normalized_number
 
 # Приклад використання
 raw_numbers = [
