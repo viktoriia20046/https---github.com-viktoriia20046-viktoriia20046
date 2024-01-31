@@ -3,19 +3,19 @@ from datetime import datetime
 def get_days_from_today(date):
     try:
         # Перетворюємо рядок дати у форматі 'РРРР-ММ-ДД' у об'єкт datetime
-        input_date = datetime.strptime(date, '%Y-%m-%d') 
+        input_date = datetime.strptime(date, '%Y-%m-%d').date()
 
         # Отримуємо поточну дату
-        current_date = datetime.today()
+        current_date = datetime.today().date()
 
         # Розраховуємо різницю між поточною датою та заданою датою
         difference = input_date - current_date
 
         # Повертаємо різницю у днях як ціле число
-        return difference.days 
+        return difference.days
     except ValueError:
         # Обробляємо виняток, якщо вхідні дані мають неправильний формат
-        print("Неправильний формат дати. Використовуйте '%Y-%m-%d' ")
+        print("Неправильний формат дати. Використовуйте '%Y-%m-%d'")
         return None
 
 # Отримуємо поточну дату та форматуємо її до 'РРРР-ММ-ДД'
@@ -26,6 +26,7 @@ result = get_days_from_today('2021-06-29')
 
 # Виводимо результат
 print(f"Сьогодні {today}, кількість днів до 2021-06-29: {result}")
+
 
 #Завдання 2 
 
@@ -51,18 +52,22 @@ lottery_numbers = get_numbers_ticket(1, 49, 6)
 print("Ваші лотерейні числа:", lottery_numbers)
 
 #Завдання 3
+
 import re
 
 def normalize_phone(phone_number):
     # Видаляємо всі символи, крім цифр та '+'
     cleaned_number = re.sub(r'\D', '', phone_number)
 
-    # Перевірка чи номер починається з '+'
-    if cleaned_number.startswith('+'):
-        return cleaned_number
-    else:
-        # Додаємо міжнародний код '+38'
-        return '+38' + cleaned_number
+    # Додаємо міжнародний код '+38', якщо його немає
+    if not cleaned_number.startswith('+'):
+        cleaned_number = '+38' + cleaned_number
+
+    # Видаляємо префікс '8', якщо він є
+    cleaned_number = re.sub(r'^8', '', cleaned_number)
+
+    # Повертаємо нормалізований номер
+    return cleaned_number
 
 # Приклад використання
 raw_numbers = [
@@ -80,6 +85,8 @@ raw_numbers = [
 sanitized_numbers = [normalize_phone(num) for num in raw_numbers]
 print("Нормалізовані номери телефонів для SMS-розсилки:", sanitized_numbers)
 
+
+
 #4 завдання 
 from datetime import datetime, timedelta
 
@@ -92,7 +99,7 @@ def get_upcoming_birthdays(users):
 
         # Визначення дати народження на наступний рік, якщо вона вже минула у поточному році
         if birthday < today:
-            birthday = birthday.replace(year=today.year + 1)
+            birthday = birthday.replace(year=today.year)
 
         # Визначення різниці між днем народження та поточним днем
         days_until_birthday = (birthday - today).days
@@ -114,7 +121,10 @@ def get_upcoming_birthdays(users):
 # Приклад використання:
 users = [
     {"name": "John Doe", "birthday": "1985.01.23"},
-    {"name": "Jane Smith", "birthday": "1990.01.27"}
+    {"name": "Jane Smith", "birthday": "1990.01.27"},
+    {"name": "Ethan Williams", "birthday": "1970.01.30"},
+    {"name": "Smith Smith", "birthday": "1990.01.31"},
+    {"name": "Liam Smith", "birthday": "1995.02.01"}
 ]
 
 upcoming_birthdays = get_upcoming_birthdays(users)
