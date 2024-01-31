@@ -56,6 +56,10 @@ def normalize_phone(phone_number):
     digits_and_plus = "".join(filter(str.isdigit, phone_number))
 
 # Завдання 3
+    def normalize_phone(phone_number):
+    # Видаляємо всі символи, окрім цифр та '+'
+     digits_and_plus = "".join(filter(str.isdigit, phone_number))
+
     # Перевіряємо, чи номер починається з '+', і виправляємо префікс згідно з вказівками
     if digits_and_plus.startswith("+"):
         normalized_number = digits_and_plus
@@ -64,7 +68,7 @@ def normalize_phone(phone_number):
     elif digits_and_plus.startswith("80") and len(digits_and_plus) == 11:
         normalized_number = "+3" + digits_and_plus[1:]
     elif digits_and_plus.startswith("0") and len(digits_and_plus) == 10:
-        normalized_number = "+38" + digits_and_plus[1:]
+        normalized_number = "+38" + digits_and_plus
     else:
         normalized_number = "+" + digits_and_plus
 
@@ -85,7 +89,6 @@ raw_numbers = [
 
 sanitized_numbers = [normalize_phone(num) for num in raw_numbers]
 print("Нормалізовані номери телефонів для SMS-розсилки:", sanitized_numbers)
-
 
 #4 завдання 
 from datetime import datetime, timedelta
